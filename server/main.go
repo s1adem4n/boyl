@@ -2,6 +2,7 @@ package main
 
 import (
 	"context"
+	"errors"
 	"log"
 	"net/http"
 	"os"
@@ -39,6 +40,18 @@ func main() {
 	})
 
 	app.OnServe().BindFunc(func(se *core.ServeEvent) error {
+		se.InstallerFunc = func(app core.App, systemSuperuser *core.Record, baseURL string) error {
+			email := os.Getenv("ADMIN_EMAIL")
+			password := os.Getenv("ADMIN_PASSWORD")
+			if email == "" || password == "" {
+				return errors.New("ADMIN_EMAIL and ADMIN_PASSWORD environment variables are not set, admin user will not be created")
+			}
+			systemSuperuser.SetEmail(email)
+			systemSuperuser.SetPassword(password)
+
+			return app.Save(systemSuperuser)
+		}
+
 		gamesDirectory := loadEnv("GAMES_DIRECTORY")
 		igdbClientID := loadEnv("IGDB_CLIENT_ID")
 		igdbClientSecret := loadEnv("IGDB_CLIENT_SECRET")
