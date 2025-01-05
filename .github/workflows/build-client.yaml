@@ -1,4 +1,4 @@
-name: Build server container image
+name: Build and release client
 on:
   push:
     branches:
