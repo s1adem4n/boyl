@@ -6,32 +6,35 @@ bun run build
 cd ..
 
 build_windows() {
-  export GOOS=windows
-  export GOARCH=amd64
-  export CGO_ENABLED=1
-  export CC=x86_64-w64-mingw32-gcc
-  export CXX=x86_64-w64-mingw32-g++
+  GOOS=windows
+  GOARCH=amd64
+  CGO_ENABLED=1
+  CC=x86_64-w64-mingw32-gcc
+  CXX=x86_64-w64-mingw32-g++
 
   WEBVIEW2_INCLUDE_PATH="$(pwd)/libs/webview2/build/native/include"
   MIGW_INCLUDE_PATH="$(pwd)/libs/mingw"
-  export CGO_CFLAGS="-I${WEBVIEW2_INCLUDE_PATH} -I${MIGW_INCLUDE_PATH}"
-  export CGO_CXXFLAGS="-I${WEBVIEW2_INCLUDE_PATH} -I${MIGW_INCLUDE_PATH}"
+  CGO_CFLAGS="-I${WEBVIEW2_INCLUDE_PATH} -I${MIGW_INCLUDE_PATH}"
+  CGO_CXXFLAGS="-I${WEBVIEW2_INCLUDE_PATH} -I${MIGW_INCLUDE_PATH}"
 
-  go build -o build/boyl_windows_amd64.exe main.go
-  zip -r build/boyl_"${REF_NAME}"_windows_amd64.zip build/boyl_windows_amd64.exe
+  OUTPUT_NAME=boyl_${REF_NAME}_windows_amd64
+  BINARY_PATH=build/${OUTPUT_NAME}.exe
+
+  GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} CC=${CC} CXX=${CXX} CGO_CFLAGS=${CGO_CFLAGS} CGO_CXXFLAGS=${CGO_CXXFLAGS} go build -o "${BINARY_PATH}" main.go
+  zip -r build/"${OUTPUT_NAME}".zip "${BINARY_PATH}"
+  rm "${BINARY_PATH}"
 }
 
 build_linux() {
-  export GOOS=linux
-  export GOARCH=amd64
-  export CGO_ENABLED=1
-  export CC=
-  export CXX=
-  export CGO_CFLAGS=
-  export CGO_CXXFLAGS=
+  GOOS=linux
+  GOARCH=amd64
+  CGO_ENABLED=1
+  OUTPUT_NAME=boyl_${REF_NAME}_linux_amd64
+  BINARY_PATH=build/${OUTPUT_NAME}
 
-  go build -o build/boyl_linux_amd64 main.go
-  zip -r build/boyl_"${REF_NAME}"_linux_amd64.zip build/boyl_linux_amd64
+  GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} go build -o "${BINARY_PATH}" main.go
+  zip -r build/"${OUTPUT_NAME}".zip "${BINARY_PATH}"
+  rm "${BINARY_PATH}"
 }
 
 build_windows
