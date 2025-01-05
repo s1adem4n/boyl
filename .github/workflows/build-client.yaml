@@ -38,12 +38,12 @@ jobs:
         run: cd client && REF_NAME=${{ github.ref_name }} ./build.sh
 
       - name: Upload windows build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: client/build/boyl_${{ github.ref_name }}_windows_amd64.zip
 
       - name: Upload linux build
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v4
         with:
           path: client/build/boyl_${{ github.ref_name }}_linux_amd64.zip
 
