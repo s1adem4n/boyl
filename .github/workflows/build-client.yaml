@@ -33,6 +33,7 @@ jobs:
         with:
           packages: mingw-w64 libwebkit2gtk-4.0-dev libwebkit2gtk-4.0-37 libgtk-3-0 libgtk-3-dev
           version: 1.0
+          execute_install_scripts: true
 
       - name: Run build script
         run: cd client && REF_NAME=${{ github.ref_name }} ./build.sh
