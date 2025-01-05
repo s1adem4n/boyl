@@ -81,7 +81,7 @@ func main() {
 		)
 
 		se.Router.GET("/api/download", func(e *core.RequestEvent) error {
-			if e.Auth != nil && e.Auth.GetBool("verified") != true {
+			if e.Auth == nil || (!e.Auth.IsSuperuser() && e.Auth.GetBool("verified") != true) {
 				return e.UnauthorizedError("unauthorized", nil)
 			}
 
@@ -118,6 +118,10 @@ func main() {
 		})
 
 		se.Router.GET("/api/scan", func(e *core.RequestEvent) error {
+			if e.Auth == nil || (!e.Auth.IsSuperuser() && e.Auth.GetBool("verified") != true) {
+				return e.UnauthorizedError("unauthorized", nil)
+			}
+
 			if scanner.IsScanning() {
 				return e.JSON(200, "Scanning in progress")
 			}
