@@ -5,6 +5,9 @@ on:
       - main
     tags:
       - v*
+    paths:
+      - server/**
+      - .github/workflows/build-server.yaml
 
 jobs:
   docker:

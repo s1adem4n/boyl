@@ -5,6 +5,9 @@ on:
       - main
     tags:
       - v*
+    paths:
+      - client/**
+      - .github/workflows/build-client.yaml
 
 jobs:
   build:
@@ -24,6 +27,8 @@ jobs:
           key: ${{ runner.os }}-bun-${{ hashFiles('**/bun.lockb') }}
           restore-keys: |
             ${{ runner.os }}-bun-
+
+      - run: sudo apt-get update
 
       - name: Install mingw
         run: sudo apt-get install mingw-w64
