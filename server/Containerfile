@@ -1,0 +1,7 @@
+FROM docker.io/alpine:latest
+
+COPY build/server /server
+EXPOSE 8080
+VOLUME [ "/config" ]
+ENV GAMES_DIRECTORY=/games
+CMD ["/server", "serve", "--dir", "/config", "--http", ":8080"]

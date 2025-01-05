@@ -1,0 +1,40 @@
+@import 'tailwindcss';
+
+@layer base {
+	html,
+	body,
+	#app {
+		@apply h-full w-full;
+	}
+
+	body {
+		@apply bg-background text-foreground;
+	}
+}
+
+@theme {
+	--color-background: var(--color-gray-950);
+	--color-foreground: var(--color-gray-100);
+	--color-primary: var(--color-emerald-500);
+	--color-primary-foreground: var(--color-gray-100);
+
+	--color-border: var(--color-gray-800);
+	--color-accent: var(--color-gray-700);
+	--color-muted: var(--color-gray-500);
+
+	--opacity-blur: 0.8;
+	--radius: 0.5rem;
+
+	--animate-fade-in-down: fade-in-down 0.5s ease-out;
+
+	@keyframes fade-in-down {
+		from {
+			opacity: 0;
+			transform: translateY(10px);
+		}
+		to {
+			opacity: 1;
+			transform: translateY(0);
+		}
+	}
+}
