@@ -3,8 +3,8 @@ on:
   push:
     branches:
       - main
-  tags:
-    - v*
+    tags:
+      - v*
 
 jobs:
   docker:
@@ -28,10 +28,7 @@ jobs:
         run: REF_NAME=${{ github.ref_name }} client/build.sh
 
       - name: Create a release with the zip files in client/build
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             client/build/*.zip
-          token: ${{ secrets.GITHUB_TOKEN }}
-          release_name: ${{ github.ref_name }}
-          body: ${{ github.ref_name }}
