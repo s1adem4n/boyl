@@ -5,6 +5,7 @@
 	import client from '$lib/client';
 	import { clientState } from '$lib/state.svelte';
 	import { validateEmail, validatePath, validateUrl } from '$lib/utils';
+	import { ClientResponseError } from 'pocketbase';
 
 	let gamesDirectory = $state(clientState.settings.gamesDirectory);
 	let serverUrl = $state(clientState.settings.serverUrl);
@@ -83,7 +84,9 @@
 				await remote.collection('users').authWithPassword(email, password);
 				goto('/');
 			} catch (e) {
-				error = 'Could not authenticate with server';
+				if (e instanceof ClientResponseError) {
+					error = e.message;
+				}
 			}
 			await client.send('/api/update-remote', {});
 		}}

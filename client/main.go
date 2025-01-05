@@ -168,7 +168,7 @@ func main() {
 
 	if len(os.Args) == 1 {
 		go func() {
-			w := webview.New(false)
+			w := webview.New(true)
 
 			w.SetTitle("Boyl")
 			w.SetSize(480, 320, webview.HintMin)

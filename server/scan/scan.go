@@ -208,7 +208,7 @@ func (s *Scanner) Update(ctx context.Context) error {
 	if err != nil {
 		return err
 	}
-	status.Set("text", "Scanning")
+	status.Set("text", "Fetching metadata")
 	status.Set("total", total)
 	s.app.Save(status)
 
