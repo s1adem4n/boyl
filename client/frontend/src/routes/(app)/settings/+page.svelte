@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { goto } from '$app/navigation';
+	import client from '$lib/client';
 	import { Button, Checkbox, Input } from '$lib/components/ui';
 	import remote from '$lib/remote';
 	import { clientState } from '$lib/state.svelte';
 	import { validateEmail, validatePath, validateUrl } from '$lib/utils';
+	import { ClientResponseError } from 'pocketbase';
 
 	let gamesDirectory = $state(clientState.settings.gamesDirectory);
 	let serverUrl = $state(clientState.settings.serverUrl);
@@ -88,13 +90,15 @@
 			clientState.setSetting('email', email);
 			clientState.setSetting('password', password);
 
-			remote.baseURL = serverUrl;
 			try {
 				await remote.collection('users').authWithPassword(email, password);
 				goto('/');
 			} catch (e) {
-				error = 'Could not authenticate with server';
+				if (e instanceof ClientResponseError) {
+					error = e.message;
+				}
 			}
+			await client.send('/api/update-remote', {});
 		}}
 	>
 		Save

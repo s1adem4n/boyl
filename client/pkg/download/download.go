@@ -199,6 +199,8 @@ func (d *Download) extract() error {
 		return err
 	}
 
+	// closing the file for windows because its a shitty os
+	file.Close()
 	if err := os.Remove(d.archivePath); err != nil {
 		return err
 	}

@@ -34,6 +34,10 @@ func NewManager(app core.App, downloadsCollection *core.Collection, gamesCollect
 
 func (m *Manager) Worker(records chan *core.Record) {
 	for record := range records {
+		if record == nil {
+			m.app.Logger().Error("nil record")
+			continue
+		}
 		download, err := NewDownload(record, m.app, m.settings, m.remote)
 		if err != nil {
 			m.app.Logger().Error("failed to create download", "error", err)
