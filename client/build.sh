@@ -20,7 +20,10 @@ build_windows() {
   OUTPUT_NAME=boyl_${REF_NAME}_windows_amd64
   BINARY_PATH=build/${OUTPUT_NAME}.exe
 
-  GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} CC=${CC} CXX=${CXX} CGO_CFLAGS=${CGO_CFLAGS} CGO_CXXFLAGS=${CGO_CXXFLAGS} go build -o "${BINARY_PATH}" main.go
+  # generate windows resource
+  x86_64-w64-mingw32-windres windres/resource.rc rsrc_windows_amd64.syso
+
+  GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} CC=${CC} CXX=${CXX} CGO_CFLAGS=${CGO_CFLAGS} CGO_CXXFLAGS=${CGO_CXXFLAGS} go build -o "${BINARY_PATH}" -ldflags="-H windowsgui" main.go
   zip -r build/"${OUTPUT_NAME}".zip "${BINARY_PATH}"
 }
 

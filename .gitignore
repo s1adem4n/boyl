@@ -1,3 +1,4 @@
 build/
 pb_data/
 .env
+rsrc_windows_amd64.syso
