@@ -22,7 +22,6 @@ build_windows() {
 
   GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} CC=${CC} CXX=${CXX} CGO_CFLAGS=${CGO_CFLAGS} CGO_CXXFLAGS=${CGO_CXXFLAGS} go build -o "${BINARY_PATH}" main.go
   zip -r build/"${OUTPUT_NAME}".zip "${BINARY_PATH}"
-  rm "${BINARY_PATH}"
 }
 
 build_linux() {
@@ -34,7 +33,6 @@ build_linux() {
 
   GOOS=${GOOS} GOARCH=${GOARCH} CGO_ENABLED=${CGO_ENABLED} go build -o "${BINARY_PATH}" main.go
   zip -r build/"${OUTPUT_NAME}".zip "${BINARY_PATH}"
-  rm "${BINARY_PATH}"
 }
 
 build_windows
