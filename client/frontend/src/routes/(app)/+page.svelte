@@ -16,6 +16,7 @@
 						'h-full w-full',
 						clientState.settings.fitCovers ? 'object-contain' : 'object-cover'
 					]}
+					loading="lazy"
 					alt={game.name}
 				/>
 				<img

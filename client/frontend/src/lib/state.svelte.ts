@@ -1,8 +1,7 @@
 import { subscribeMultiple } from './utils';
 import client from './client';
 import server from './remote';
-import type { ClientGame, ClientSettings, Download, Game, Setting } from './types';
-import type { AuthRecord } from 'pocketbase';
+import type { ClientGame, ClientSettings, Download, Game, Setting, User } from './types';
 
 class ClientState {
 	#rawSettings: Setting[] = $state([]);
@@ -88,15 +87,15 @@ export const clientState = new ClientState();
 
 class RemoteState {
 	games: Game[] = $state([]);
-	auth: { token: string; record: AuthRecord } = $state({ token: '', record: null });
+	auth: { token: string; record: User | null } = $state({ token: '', record: null });
 
 	async load() {
 		server.authStore.onChange((token, record) => {
-			this.auth = { token, record };
+			this.auth = { token, record: record as unknown as User };
 		});
 		this.auth = {
 			token: server.authStore.token,
-			record: server.authStore.record
+			record: server.authStore.record as unknown as User
 		};
 
 		const gamesUnsubscribe = await subscribeMultiple(

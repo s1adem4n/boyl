@@ -58,3 +58,8 @@ export interface ClientSettings {
 	password: string;
 	fitCovers: boolean;
 }
+
+export interface User extends Base {
+	avatar: string;
+	email: string;
+}

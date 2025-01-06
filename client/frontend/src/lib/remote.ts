@@ -1,8 +1,9 @@
 import PocketBase, { type RecordService } from 'pocketbase';
-import type { Game, Status } from './types';
+import type { Game, Status, User } from './types';
 
 interface TypedPocketBase extends PocketBase {
 	collection(idOrName: string): RecordService;
+	collection(idOrName: 'users'): RecordService<User>;
 	collection(idOrName: 'games'): RecordService<Game>;
 	collection(idOrName: 'status'): RecordService<Status>;
 }

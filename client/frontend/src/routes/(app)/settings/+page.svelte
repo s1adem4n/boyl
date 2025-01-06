@@ -90,6 +90,7 @@
 			clientState.setSetting('email', email);
 			clientState.setSetting('password', password);
 
+			remote.baseURL = serverUrl;
 			try {
 				await remote.collection('users').authWithPassword(email, password);
 				goto('/');

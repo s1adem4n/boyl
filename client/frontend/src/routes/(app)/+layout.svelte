@@ -4,19 +4,29 @@
 	import Gamepad from '~icons/lucide/gamepad';
 	import Download from '~icons/lucide/download';
 
-	import { onMount } from 'svelte';
-	import { remoteState } from '$lib/state.svelte';
+	import { clientState, remoteState } from '$lib/state.svelte';
 	import { Downloads, Spinner } from '$lib/components';
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
+	import remote from '$lib/remote';
 
 	let { children } = $props();
 	let loading = $state(true);
-	let downloadsOpen = $state(true);
+	let downloadsOpen = $state(false);
 
-	onMount(() => {
-		const unsub = remoteState.load();
-		unsub.then(() => (loading = false));
+	$effect(() => {
+		loading = true;
+
+		remote.baseURL = clientState.settings.serverUrl;
+
+		let unsub: Promise<() => void>;
+		remote
+			.collection('users')
+			.authWithPassword(clientState.settings.email, clientState.settings.password)
+			.then(() => {
+				unsub = remoteState.load();
+				unsub.then(() => (loading = false));
+			});
 
 		return () => unsub.then((fn) => fn());
 	});
