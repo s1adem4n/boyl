@@ -8,6 +8,7 @@
 	import { ClientResponseError } from 'pocketbase';
 
 	let gamesDirectory = $state(clientState.settings.gamesDirectory);
+	let defaultLauncher = $state(clientState.settings.defaultLauncher);
 	let serverUrl = $state(clientState.settings.serverUrl);
 	let email = $state(clientState.settings.email);
 	let password = $state(clientState.settings.password);
@@ -52,7 +53,18 @@
 		</label>
 	</div>
 
-	<h2 class="text-xl font-bold">Server settings</h2>
+	<div class="flex flex-col gap-2">
+		<p class="text-muted text-sm">
+			Change how games should be launched. Useful for launching Windows games on Linux.
+		</p>
+		<label class="flex flex-col gap-1">
+			Default launcher
+			<Input placeholder="wine / protontricks-launch / ..." bind:value={defaultLauncher} />
+		</label>
+	</div>
+
+	<h2 class="mt-4 text-xl font-bold">Server settings</h2>
+
 	<div class="flex flex-col gap-2">
 		<p class="text-muted text-sm">Please setup the connection to your server.</p>
 		<label class="flex flex-col gap-1">
@@ -86,6 +98,7 @@
 		onclick={async () => {
 			clientState.setSetting('setup', 'true');
 			clientState.setSetting('gamesDirectory', gamesDirectory);
+			clientState.setSetting('defaultLauncher', defaultLauncher);
 			clientState.setSetting('serverUrl', serverUrl);
 			clientState.setSetting('email', email);
 			clientState.setSetting('password', password);

@@ -6,6 +6,7 @@ require (
 	github.com/PuerkitoBio/goquery v1.10.1
 	github.com/bodgit/sevenzip v1.6.0
 	github.com/cavaliergopher/grab/v3 v3.0.1
+	github.com/google/shlex v0.0.0-20191202100458-e7afc7fbc510
 	github.com/joho/godotenv v1.5.1
 	github.com/klauspost/compress v1.17.11
 	github.com/klauspost/pgzip v1.2.6

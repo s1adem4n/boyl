@@ -9,8 +9,11 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"os/exec"
 	"runtime"
 	"strings"
+
+	"github.com/google/shlex"
 
 	"github.com/pocketbase/pocketbase"
 	"github.com/pocketbase/pocketbase/apis"
@@ -128,6 +131,58 @@ func main() {
 					return err
 				}
 			}
+
+			return e.JSON(200, "")
+		})
+
+		se.Router.POST("/api/launch", func(e *core.RequestEvent) error {
+			q := e.Request.URL.Query()
+			id := q.Get("id")
+			if id == "" {
+				return e.BadRequestError("id is required", nil)
+			}
+
+			game, err := app.FindRecordById(gamesCollection, id)
+			if err != nil {
+				return e.NotFoundError("game not found", nil)
+			}
+
+			executable := game.GetString("executable")
+			if executable == "" {
+				return e.BadRequestError("executable is required", nil)
+			}
+
+			userArgs, err := shlex.Split(game.GetString("args"))
+			if err != nil {
+				return e.BadRequestError("failed to parse args", err)
+			}
+
+			launcherString := game.GetString("launcher")
+			if launcherString == "" {
+				launcherString = s.GetString("defaultLauncher")
+			}
+			launcher, err := shlex.Split(launcherString)
+			if err != nil {
+				return e.BadRequestError("failed to parse launcher", err)
+			}
+
+			var name string
+			var args []string
+
+			if len(launcher) > 0 {
+				name = launcher[0]
+				args = append(launcher[1:], executable)
+			} else {
+				name = executable
+			}
+			args = append(args, userArgs...)
+
+			cmd := exec.Command(name, args...)
+			cmd.Env = os.Environ()
+			if err := cmd.Start(); err != nil {
+				return e.InternalServerError("failed to start", err)
+			}
+			cmd.Process.Release()
 
 			return e.JSON(200, "")
 		})

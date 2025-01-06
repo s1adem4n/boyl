@@ -9,10 +9,14 @@
 	import { fade } from 'svelte/transition';
 	import { page } from '$app/state';
 	import remote from '$lib/remote';
+	import { onNavigate } from '$app/navigation';
 
 	let { children } = $props();
 	let loading = $state(true);
 	let downloadsOpen = $state(false);
+	const activeDownloads = $derived(
+		clientState.downloads.filter((d) => d.status !== 'completed' && d.status !== 'failed').length
+	);
 
 	$effect(() => {
 		loading = true;
@@ -34,6 +38,10 @@
 	function isActive(path: string) {
 		return page.url.pathname === path && !downloadsOpen;
 	}
+
+	onNavigate(() => {
+		downloadsOpen = false;
+	});
 </script>
 
 {#if loading}
@@ -58,10 +66,17 @@
 				<LayoutGrid class="h-8 w-8" />
 			</a>
 			<button
-				class={['p-2 transition-colors', downloadsOpen && 'bg-accent']}
+				class={['relative p-2 transition-colors', downloadsOpen && 'bg-accent']}
 				onclick={() => (downloadsOpen = !downloadsOpen)}
 			>
 				<Download class="h-8 w-8" />
+				{#if activeDownloads > 0}
+					<span
+						class="bg-primary text-primary-foreground absolute right-1 top-1 flex h-4 w-4 items-center justify-center rounded text-sm font-bold"
+					>
+						{activeDownloads}
+					</span>
+				{/if}
 			</button>
 			<a
 				href="/settings"

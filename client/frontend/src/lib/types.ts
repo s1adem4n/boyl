@@ -52,6 +52,7 @@ export interface ClientSettings {
 	[key: string]: unknown;
 	os: 'windows' | 'linux' | 'darwin';
 	gamesDirectory: string;
+	defaultLauncher: string;
 	setup: boolean;
 	serverUrl: string;
 	email: string;

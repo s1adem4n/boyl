@@ -54,7 +54,10 @@ func (m *Manager) Worker(records chan *core.Record) {
 			continue
 		}
 
-		game := core.NewRecord(m.gamesCollection)
+		game, err := m.app.FindFirstRecordByData(m.gamesCollection, "game", record.GetString("game"))
+		if err != nil {
+			game = core.NewRecord(m.gamesCollection)
+		}
 		game.Set("game", download.game.ID)
 		game.Set("path", download.baseDirectory)
 
@@ -93,6 +96,5 @@ func (m *Manager) Cancel(id string) error {
 
 	download.cancel()
 	download.record.Set("status", "failed")
-	download.record.Set("text", "Canceled by user")
 	return m.app.Save(download.record)
 }

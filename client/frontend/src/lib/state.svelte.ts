@@ -10,6 +10,7 @@ class ClientState {
 			setup: false,
 			os: 'windows',
 			gamesDirectory: '',
+			defaultLauncher: '',
 			serverUrl: '',
 			email: '',
 			password: '',
@@ -79,6 +80,16 @@ class ClientState {
 
 		if (!res.ok) {
 			throw new Error('Failed to cancel download');
+		}
+	}
+
+	async launchGame(id: string) {
+		const res = await client.send(`/api/launch?id=${id}`, {
+			method: 'POST'
+		});
+
+		if (!res.ok) {
+			throw new Error('Failed to launch game');
 		}
 	}
 }

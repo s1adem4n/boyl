@@ -32,7 +32,7 @@
 
 <div class="flex flex-col gap-4">
 	<span class="text-lg">Downloads</span>
-	{#each sortCreated(clientState.downloads) as download}
+	{#each sortCreated(clientState.downloads).reverse() as download}
 		{@const game = remoteState.games.find((g) => g.id === download.game)!}
 		{@const progress = new Tween(download.progress, {
 			duration: 1000,

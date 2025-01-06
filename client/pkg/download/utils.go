@@ -2,6 +2,7 @@ package download
 
 import (
 	"io/fs"
+	"math"
 	"os"
 	"path/filepath"
 	"strings"
@@ -56,9 +57,10 @@ func isExecutable(info os.FileInfo) bool {
 	return info.Mode()&0111 != 0 || strings.HasSuffix(info.Name(), ".exe")
 }
 
+// Finds executable in a directory that is closest to the root directory.
 func FindExecutablePath(directory string) (string, error) {
 	var path string
-	depth := -1
+	depth := math.MaxInt32
 
 	err := filepath.WalkDir(directory, func(p string, d fs.DirEntry, err error) error {
 		if err != nil {
@@ -75,7 +77,7 @@ func FindExecutablePath(directory string) (string, error) {
 
 		if isExecutable(info) {
 			thisDepth := getPathDepth(p)
-			if thisDepth > depth {
+			if thisDepth < depth {
 				path = p
 				depth = thisDepth
 			}
